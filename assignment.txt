@@ -1,0 +1,97 @@
+public String[][] getGroupOfTeams()
+{
+String teams={"Arsenal (ENG)",
+"Astana (KAZ)",
+"Atlético (ESP),
+"Barcelona (ESP),
+"BATE (BLR),
+"Bayern (GER),
+"Benfica (POR),
+"Chelsea (ENG),
+"CSKA Moskva (RUS),
+"Dinamo Zagreb (CRO),
+"Dynamo Kyiv (UKR"),
+"Galatasaray (TUR)",
+" Gent (BEL)",
+ "Juventus (ITA)",
+ "Leverkusen (GER)",
+ "Lyon (FRA)",
+" M. Tel-Aviv (ISR)",
+" Malmö (SWE)",
+" Man. City (ENG)",
+ "Man. United (ENG)",
+ "Mönchengladbach (GER)",
+ "Olympiacos (GRE)",
+ "Paris (FRA)",
+" Porto (POR)",
+ "PSV (NED)",
+ "Real Madrid (ESP)",
+"Roma (ITA)",
+"Sevilla (ESP)",
+ "Shakhtar Donetsk (UKR)",
+ "Valencia (ESP)",
+ "Wolfsburg (GER)",
+"Zenit (RUS)"} 
+String[][] Group=new String[8][4];
+int min=0;
+int max=31;
+for( int i =0; i < 8 ; i++)
+{
+for(int j=0;j<4;j++)
+{
+  int randomNum = rand.nextInt((max - min) + 1) + min;
+  Group[i][j]=teams[i];
+}
+}
+return Group;
+}
+
+public String[] getDomesticLeagueTeams(String Group[][])
+{
+String DomesticLeagueTeams[]=new String[8];
+for(int i=0;i<8;i++)
+DomesticLeagueTeams[i]=Group[i][0];
+
+return DomesticLeagueTeams;
+
+}
+
+public String[][] writeToFileAndCreateZip(String Group[][])
+{
+     PrintWriter out = new PrintWriter(new FileWriter("TeamInfo.txt", true), true);
+     String heading=" Group-A Group-B Group-C Group-D Group-E Group-F   Group-G   Group-H ";
+     out.write(heading);
+     for( int i =0; i < 8 ; i++)
+  for(int j=0;j<4;j++)
+  out.write(Group[i][j]);
+
+     out.close();
+  FileOutputStream fos = new FileOutputStream("TeamInfoZip.zip");
+      ZipOutputStream zos = new ZipOutputStream(fos);
+      ZipEntry ze= new ZipEntry("TeamInfo.txt");
+      zos.putNextEntry(ze);
+      FileInputStream in = new FileInputStream("TeamInfo.txt");
+      
+      int len;
+      while ((len = in.read(buffer)) > 0) {
+       zos.write(buffer, 0, len);
+      }
+
+      in.close();
+      zos.closeEntry();
+      zos.close();
+}
+
+#  To generate a fresh New List, call getGroupOfTeams() method every time, like this-
+
+String Group[][]=new String[8][4];
+Group=getGroupOfTeams();
+
+#  To get Domestic League Champions,
+
+String DomesticLeagueTeams[]=new String[8];
+DomesticLeagueTeams=getDomesticLeagueTeams(Group);
+
+#  To write all this data in a file, and Zip it
+
+writeToFileAndCreateZip(Group);
